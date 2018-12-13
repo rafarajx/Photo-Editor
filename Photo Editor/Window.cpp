@@ -6,10 +6,14 @@
 __int64 __stdcall WndProc(HWND hwnd, unsigned __int32 msg, unsigned __int64 wParam, __int64 lParam) {
 	Window* w = Window::handles[hwnd];
 	if (w == nullptr) return DefWindowProc(hwnd, msg, wParam, lParam);
-
-
+	
 	switch (msg) {
 	case WM_CREATE:
+		std::cout << "wmcreate" << std::endl;
+		for (int i = 0; i < w->controls.size(); i++) {
+			Control *c = w->controls[i];
+			c->create(hwnd);
+		}
 		CB(Create);
 		break;
 	case WM_COMMAND:
@@ -67,12 +71,12 @@ void Window::create() {
 		MessageBox(NULL, "Failed to create a window", "Error", MB_ICONERROR);
 		exit(0);
 	}
-	handles[hwnd] = this;
 
 	ShowWindow(hwnd, 1);
 
-
 	HDC hdc = GetDC(hwnd);
+	
+	handles[hwnd] = this;
 }
 
 void Window::update() {
@@ -83,7 +87,6 @@ void Window::update() {
 	}
 }
 
-void Window::add(Button button) {
-	controls.push_back(button.hwnd);
-	button.create(hwnd);
+void Window::add(Button *button) {
+	controls.push_back(button);
 }

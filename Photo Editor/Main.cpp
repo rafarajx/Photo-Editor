@@ -10,7 +10,7 @@ int main() {
 	Window w1(600, 600);
 	w1.create();
 
-	Button b1("tralala", 10, 10, 80, 20);
+	Button *b1 = new Button("tralala", 10, 10, 80, 20);
 	w1.add(b1);
 
 	while (true) {

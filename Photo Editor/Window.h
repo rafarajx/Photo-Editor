@@ -3,6 +3,7 @@
 #include <Windows.h>
 #include <map>
 #include <vector>
+#include <iostream>
 
 #include "Button.h"
 
@@ -13,7 +14,7 @@ private:
 	HWND hwnd;
 	MSG message;
 public:
-	std::vector<HWND> controls;
+	std::vector<Control*> controls;
 	int width, height;
 	
 	static std::map<HWND, Window*> handles;
@@ -22,7 +23,7 @@ public:
 
 	void create();
 	void update();
-	void add(Button button);
+	void add(Button *button);
 
 	SCB(Create);
 	SCB(Paint);
