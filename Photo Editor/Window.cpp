@@ -1,10 +1,23 @@
 
 #include "Window.h"
 
+#define CB(x) if (w-> ## x ## CB != nullptr) w-> ## x ## CB(hwnd)
+
 __int64 __stdcall WndProc(HWND hwnd, unsigned __int32 msg, unsigned __int64 wParam, __int64 lParam) {
 	Window* w = Window::handles[hwnd];
-	
+	if (w == nullptr) return DefWindowProc(hwnd, msg, wParam, lParam);
+
+
 	switch (msg) {
+	case WM_CREATE:
+		CB(Create);
+		break;
+	case WM_COMMAND:
+		CB(Command);
+		break;
+	case WM_PAINT:
+		CB(Paint);
+		break;
 	case WM_CLOSE:
 		DestroyWindow(hwnd);
 		break;
@@ -17,11 +30,14 @@ __int64 __stdcall WndProc(HWND hwnd, unsigned __int32 msg, unsigned __int64 wPar
 	return 0;
 }
 
+std::map<HWND, Window*> Window::handles;
+
 Window::Window(int width, int height) : width(width), height(height){
 
 }
 
 void Window::create() {
+
 	WNDCLASS wc = { };
 	wc.lpfnWndProc = WndProc;
 	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
@@ -39,7 +55,7 @@ void Window::create() {
 	HWND dhwnd = GetDesktopWindow();
 	GetWindowRect(dhwnd, &drect);
 
-	HWND hwnd = CreateWindow(
+	hwnd = CreateWindow(
 		wc.lpszClassName,
 		"Photo Editor by Rafal Rajtar",
 		WS_OVERLAPPEDWINDOW | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
@@ -51,10 +67,12 @@ void Window::create() {
 		MessageBox(NULL, "Failed to create a window", "Error", MB_ICONERROR);
 		exit(0);
 	}
+	handles[hwnd] = this;
 
 	ShowWindow(hwnd, 1);
 
-	handles[hwnd] = this;
+
+	HDC hdc = GetDC(hwnd);
 }
 
 void Window::update() {
@@ -63,4 +81,9 @@ void Window::update() {
 		TranslateMessage(&message);
 		DispatchMessage(&message);
 	}
+}
+
+void Window::add(Button button) {
+	controls.push_back(button.hwnd);
+	button.create(hwnd);
 }
