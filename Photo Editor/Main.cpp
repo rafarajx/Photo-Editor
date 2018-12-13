@@ -5,16 +5,21 @@
 
 using namespace std;
 
+void paint(HWND hwnd) {
+
+}
+
 int main() {
+	Window window(600, 600);
+	
+	Button *b1 = new Button("bla", 10, 10, 80, 20);
+	window.add(b1);
 
-	Window w1(600, 600);
-	w1.create();
+	window.create();
 
-	Button *b1 = new Button("tralala", 10, 10, 80, 20);
-	w1.add(b1);
-
+	window.setPaintCallback(paint);
+	
 	while (true) {
-		w1.update();
+		window.update();
 	}
-
 }

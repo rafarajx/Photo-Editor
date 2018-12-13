@@ -8,12 +8,11 @@ __int64 __stdcall WndProc(HWND hwnd, unsigned __int32 msg, unsigned __int64 wPar
 	if (w == nullptr) return DefWindowProc(hwnd, msg, wParam, lParam);
 	
 	switch (msg) {
+	case WM_INITDIALOG:
+		std::cout << "WM_INITDIALOG" << std::endl;
+		break;
 	case WM_CREATE:
-		std::cout << "wmcreate" << std::endl;
-		for (int i = 0; i < w->controls.size(); i++) {
-			Control *c = w->controls[i];
-			c->create(hwnd);
-		}
+		std::cout << "WM_CREATE" << std::endl;
 		CB(Create);
 		break;
 	case WM_COMMAND:
@@ -36,9 +35,7 @@ __int64 __stdcall WndProc(HWND hwnd, unsigned __int32 msg, unsigned __int64 wPar
 
 std::map<HWND, Window*> Window::handles;
 
-Window::Window(int width, int height) : width(width), height(height){
-
-}
+Window::Window(int width, int height) : width(width), height(height) { }
 
 void Window::create() {
 
@@ -77,6 +74,13 @@ void Window::create() {
 	HDC hdc = GetDC(hwnd);
 	
 	handles[hwnd] = this;
+
+	for (int i = 0; i < controls.size(); i++) {
+		Control *c = controls[i];
+		c->create(hwnd);
+	}
+	HBITMAP hb;
+
 }
 
 void Window::update() {

@@ -28,5 +28,4 @@ public:
 	SCB(Create);
 	SCB(Paint);
 	SCB(Command);
-
 };
