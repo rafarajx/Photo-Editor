@@ -1,6 +1,4 @@
 #include "Control.h"
 
 
-void Control::create(HWND hwnd) {
-
-}
+void Control::create(HWND hwnd) { }

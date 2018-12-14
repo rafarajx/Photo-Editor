@@ -79,8 +79,6 @@ void Window::create() {
 		Control *c = controls[i];
 		c->create(hwnd);
 	}
-	HBITMAP hb;
-
 }
 
 void Window::update() {
