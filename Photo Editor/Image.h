@@ -1,18 +1,19 @@
 #pragma once
 
-#include <FreeImage.h>
-
 #include <Windows.h>
+#include <FreeImage.h>
 
 class Image {
 
 public:
 
-	unsigned int BPP;
-	unsigned int width;
-	unsigned int height;
-
 	BYTE *bits;
+	unsigned int BPP;
+	int width;
+	int height;
+
+	HBITMAP hb;
+	void* pixels;
 
 
 	Image(const char* filename);

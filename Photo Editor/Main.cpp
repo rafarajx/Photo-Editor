@@ -13,11 +13,8 @@ Image *img;
 
 void paint(HWND hwnd) {
 
-	HBITMAP hb = CreateBitmap(img->width, img->height, 1, img->BPP, img->bits);
-	//hb = (HBITMAP)LoadImage(NULL, "../res/cat.bmp", IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	HBITMAP hb = img->hb;
 	
-	cout << hb << endl;
-
 	PAINTSTRUCT     ps;
 	HDC             hdc;
 	BITMAP          bitmap;
@@ -37,11 +34,14 @@ void paint(HWND hwnd) {
 
 	EndPaint(hwnd, &ps);
 	
+	//DeleteObject(hb);
+
+	RedrawWindow(hwnd, NULL, NULL, RDW_INVALIDATE);
 }
 
 int main() {
 
-	img = new Image("../res/cat.bmp");
+	img = new Image("../res/rocks.png");
 
 	Window window(600, 600);
 	

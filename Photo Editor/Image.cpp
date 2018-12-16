@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-using namespace std;
-
 Image::Image(const char* filename){
 	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
 
@@ -28,10 +26,22 @@ Image::Image(const char* filename){
 	width = FreeImage_GetWidth(dib);
 	height = FreeImage_GetHeight(dib);
 
-	for (int i = 0; i < width * 3; i += 3) {
-		cout << (int)bits[i] << " " << (int)bits[i + 1] << " " << (int)bits[i + 2] << endl;
+	BITMAPINFO dbmi;
+	dbmi.bmiHeader = { };
+	dbmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+	dbmi.bmiHeader.biWidth = width;
+	dbmi.bmiHeader.biHeight = height;
+	dbmi.bmiHeader.biPlanes = 1;
+	dbmi.bmiHeader.biBitCount = BPP;
+	dbmi.bmiHeader.biCompression = BI_RGB;
+
+	hb = CreateDIBSection(NULL, &dbmi, DIB_RGB_COLORS, &pixels, NULL, 0);
+	if (hb == NULL) {
+		MessageBox(NULL, "Problem width CreateDIBSection function", "Error", MB_OK);
+		exit(0);
 	}
-	
+
+	memcpy(pixels, bits, width * height * BPP / 8);
 }
 
 Image::~Image(){
